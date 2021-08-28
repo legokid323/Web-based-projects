@@ -1,0 +1,180 @@
+<html>
+	<head>
+		<title>PacMan Demo</title>
+		<style type="text/css">
+			*{
+				margin: 0px;
+			}
+			body{
+				background-color:black;
+			}
+			button{
+				background-color: red;
+			}
+			div.row div{
+				width: 20px;
+				height:20px;
+				display: inline-block;
+			}
+			div.brick{
+				background-color:blue;
+			}
+			
+			div.coin{
+				background: url('coin.png');
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+			div.empty{
+
+			}
+			div#pacman{
+				background: url('PlayerChar.gif');
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: cover;
+				height: 20px;
+				width: 20px;
+				position: absolute;
+			}
+			div#score{
+				border: 2px solid white;
+				width: 16%;
+				height: 20px;
+				color: green;
+				text-align: center;
+				font-weight: bolder;
+				font-family: 'Courier New', Courier, monospace;
+			}
+			div#ghost{
+				background: url('Dead_ghost.gif');
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: cover;
+				height: 20px;
+				width: 20px;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div id='world'></div>
+			<div id='pacman'></div>
+			<div id="ghost"></div>
+			<div id="score"></div>
+			<a href="file:///C:/DojoCode/Games/Pac-Man/index_pacman.html"><button>Reset</button></a>
+		</div>
+		<script>
+			//**********Variables**********
+			var world = [
+				[2,2,2,2,2,2,2,2,2,2,2],
+				[2,1,1,1,1,1,1,1,1,1,2],
+				[2,1,2,1,2,1,2,1,2,1,2],
+				[2,1,2,1,2,0,2,1,2,1,2],
+				[2,1,1,1,2,2,2,1,1,1,2],
+				[2,1,1,1,1,1,1,1,1,1,2],
+				[2,1,2,2,1,0,1,2,2,1,2],
+				[2,1,1,1,2,2,2,1,1,1,2],
+				[2,1,2,1,1,1,1,1,2,1,2],
+				[2,1,2,2,1,1,1,2,2,1,2],
+				[2,1,1,1,1,1,1,1,1,1,2],
+				[2,2,2,2,2,2,2,2,2,2,2]
+			];
+			var count = 0;
+			var score = 0;
+			var ghost = {
+				x: 5,
+				y: 3
+			};
+			var pacman = {
+				x: 5,
+				y: 6
+			};
+
+			//**********Functions**********
+			function displayWorld(){
+				var output = '';
+				for(var i=0; i<world.length; i++){
+					output += "\n<div class ='row'>";
+					for(var j=0; j<world[i].length; j++){
+						if(world[i][j] == 0){
+							output += "<div class='empty'></div>";
+						}
+						if(world[i][j] == 1){
+							output += "<div class='coin'></div>";
+						}
+						if(world[i][j] == 2){
+							output += "<div class='brick'></div>";
+						}
+					}
+					output += "\n</div>"
+				}
+				document.getElementById('world').innerHTML = output;
+			}
+			function displayPacman() {
+				document.getElementById('pacman').style.top = pacman.y*20+"px";
+				document.getElementById('pacman').style.left = pacman.x*20+"px";
+			}
+			function displayGhost() {
+				document.getElementById('ghost').style.top = ghost.y*20+"px";
+				document.getElementById('ghost').style.left = ghost.x*20+"px";
+			}
+			function displayScore() {
+				document.getElementById('score').innerHTML = "Score:" + score;
+			}
+
+			//**********Initial Display**********
+			displayWorld();
+			displayScore();
+			displayPacman();
+			displayGhost();
+
+			//**********Controls**********
+			document.onkeydown = function(e){
+				if (e.keyCode == 38) { // UP
+					pacman.y--;
+					if (world[pacman.y][pacman.x] == 2){
+						pacman.y++;
+					}
+				}
+				else if (e.keyCode == 40) { // DOWN
+					pacman.y++;
+					if (world[pacman.y][pacman.x] == 2){
+						pacman.y--;
+					}
+				}
+				else if (e.keyCode == 37) { // LEFT
+					pacman.x--;
+					if (world[pacman.y][pacman.x] == 2){
+						pacman.x++;
+					}
+				}
+				else if (e.keyCode == 39) { // Right
+					pacman.x++;
+					if (world[pacman.y][pacman.x] == 2){
+						pacman.x--;
+					}
+				}
+				if (world[pacman.y][pacman.x] == 1) {
+					world[pacman.y][pacman.x] = 0;
+					score += 10;
+					count++;
+					displayWorld();
+					displayScore();
+				}
+				displayPacman();
+			}
+			//**********Ghost AI**********
+			var backWard = 2;
+			setInterval(cpuDirect(),1000)
+			function cpuDirect(){
+				/*return*/var x = Math.floor(Math.random() * (4-0)) + 0;
+				console.log(x);
+			}
+				//var cpu = cpuDirect();
+				
+				
+		</script>
+	</body>
+</html>
